@@ -4,14 +4,14 @@ namespace opentk.organised;
 
 public sealed class VertexArray : IDisposable
 {
-    private bool disposed;
+    private bool _disposed;
 
     public readonly int VertexArrayHandle;
     public readonly VertexBuffer VertexBuffer;
 
     public VertexArray(VertexBuffer vertexBuffer)
     {
-        disposed = false;
+        _disposed = false;
 
         if(vertexBuffer is null)
         {
@@ -28,9 +28,8 @@ public sealed class VertexArray : IDisposable
 
         GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer.VertexBufferHandle);
 
-        for(int i = 0; i < attributes.Length; i++)
+        foreach (var attribute in attributes)
         {
-            VertexAttribute attribute = attributes[i];
             GL.VertexAttribPointer(attribute.Index, attribute.ComponentCount, VertexAttribPointerType.Float, false, vertexSizeInBytes, attribute.Offset);
             GL.EnableVertexAttribArray(attribute.Index);
         }
@@ -45,7 +44,7 @@ public sealed class VertexArray : IDisposable
 
     public void Dispose()
     {
-        if(disposed)
+        if(_disposed)
         {
             return;
         }
@@ -53,7 +52,7 @@ public sealed class VertexArray : IDisposable
         GL.BindVertexArray(0);
         GL.DeleteVertexArray(VertexArrayHandle);
 
-        disposed = true;
+        _disposed = true;
         GC.SuppressFinalize(this);
     }
 }

@@ -7,7 +7,7 @@ public sealed class IndexBuffer : IDisposable
     public static readonly int MinIndexCount = 1;
     public static readonly int MaxIndexCount = 250_000;
 
-    private bool disposed;
+    private bool _disposed;
 
     public readonly int IndexBufferHandle;
     public readonly int IndexCount;
@@ -43,7 +43,7 @@ public sealed class IndexBuffer : IDisposable
 
     public void Dispose()
     {
-        if (disposed)
+        if (_disposed)
         {
             return;
         }
@@ -51,7 +51,7 @@ public sealed class IndexBuffer : IDisposable
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         GL.DeleteBuffer(IndexBufferHandle);
 
-        disposed = true;
+        _disposed = true;
         GC.SuppressFinalize(this);
     }
 

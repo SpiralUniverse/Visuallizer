@@ -1,10 +1,10 @@
-﻿using opentk.organised;
+﻿namespace opentk.organised;
 
-internal static class Entery_Point
+internal static class EnterPoint
 {
     private static void Main(string[] args)
     {
-        using Main_Window mainWindow = new Main_Window();
+        using MainWindow mainWindow = new MainWindow();
         mainWindow.Run();
     }
 }

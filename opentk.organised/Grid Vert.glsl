@@ -8,12 +8,10 @@ out gl_PerVertex
 layout (location = 0) in vec3 i_position;
 layout (location = 1) in vec3 i_color;
 
-layout (std140, binding = 0) uniform Matrices
-{
-    mat4 model;
-    mat4 view;
-    mat4 projection;
-};
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 out vec4 ps_vertex_color;
 out vec4 ps_vertex_position;

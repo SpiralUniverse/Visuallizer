@@ -32,5 +32,5 @@ D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\frag.gls
 D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\vert.glsl
 D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Antlr3.Runtime.dll
 D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\NCalc.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\testfrag.glsl
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\testvert.glsl
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Grid Frag.glsl
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Grid Vert.glsl

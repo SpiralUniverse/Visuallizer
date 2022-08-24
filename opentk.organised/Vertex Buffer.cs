@@ -7,7 +7,7 @@ public sealed class VertexBuffer : IDisposable
     public static readonly int MinVertexCount = 1;
     public static readonly int MaxVertexCount = 100_000;
 
-    private bool disposed;
+    private bool _disposed;
 
     public readonly int VertexBufferHandle;
     public readonly VertexInfo VertexInfo;
@@ -16,7 +16,7 @@ public sealed class VertexBuffer : IDisposable
 
     public VertexBuffer(VertexInfo vertexInfo, int vertexCount, bool isStatic = true)
     {
-        disposed = false;
+        _disposed = false;
 
         if (vertexCount < MinVertexCount ||
             vertexCount > MaxVertexCount)
@@ -50,7 +50,7 @@ public sealed class VertexBuffer : IDisposable
 
     public void Dispose()
     {
-        if (disposed)
+        if (_disposed)
         {
             return;
         }
@@ -58,7 +58,7 @@ public sealed class VertexBuffer : IDisposable
         GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         GL.DeleteBuffer(VertexBufferHandle);
 
-        disposed = true;
+        _disposed = true;
         GC.SuppressFinalize(this);
     }
 

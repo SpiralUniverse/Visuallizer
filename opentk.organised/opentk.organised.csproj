@@ -19,10 +19,10 @@
       <None Update="frag.glsl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testfrag.glsl">
+      <None Update="Grid Frag.glsl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="testvert.glsl">
+      <None Update="Grid Vert.glsl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

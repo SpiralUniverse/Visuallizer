@@ -8,34 +8,33 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace opentk.organised;
 
-public class Main_Window : GameWindow
+public class MainWindow : GameWindow
 {
     
     #region -> Variables <-
 
-        private VertexBuffer vertexBuffer;
-        private IndexBuffer indexBuffer;
-        private VertexArray vertexArray;
-        private ShaderProgram shaderProgram;
-        private VertexPositionColor[] vertices;
+        private VertexBuffer _vertexBuffer;
+        private IndexBuffer _indexBuffer;
+        private VertexArray _vertexArray;
+        private ShaderProgram _shaderProgram;
+        private VertexPositionColor[] _vertices;
 
-        private Camera cam;
+        private readonly Camera _cam;
         private Vector2 _lastPos;
         private bool _firstMove = true;
-        private double _time;
 
         #endregion
     
-    public Main_Window() : base(
-        new()
+    public MainWindow() : base(
+        new GameWindowSettings
         {
             RenderFrequency = 60,
             UpdateFrequency = 60
         },
-        new()
+        new NativeWindowSettings
         {
             Location = new Vector2i(910,540),
-            Size = new(1720,880),
+            Size = new Vector2i(1720,880),
             Title = "Main Window",
             WindowBorder = WindowBorder.Hidden,
             WindowState = WindowState.Normal,
@@ -43,11 +42,11 @@ public class Main_Window : GameWindow
             StartFocused = true,
             API = ContextAPI.OpenGL,
             Profile = ContextProfile.Core,
-            APIVersion = new(4, 3)
+            APIVersion = new Version(4, 3)
         })
     { 
         CenterWindow();
-        cam = new Camera(Vector3.UnitY * 2, ClientSize.X / (float)ClientSize.Y);
+        _cam = new Camera(Vector3.UnitY * 2, ClientSize.X / (float)ClientSize.Y);
     }
 
     protected override void OnResize(ResizeEventArgs e)
@@ -55,14 +54,14 @@ public class Main_Window : GameWindow
         base.OnResize(e);
         
         GL.Viewport(0, 0, e.Width, e.Height);
-        cam.AspectRatio = Size.X / (float)Size.Y;
+        _cam.AspectRatio = Size.X / (float)Size.Y;
     }
 
     protected override void OnLoad()
     {
         base.OnLoad();
 
-        string f = "sin(x)";//Console.ReadLine();
+        string f = "sin(x) + cos(y)";//Console.ReadLine();
         IsVisible = true;
         CursorState = CursorState.Grabbed;
         
@@ -70,26 +69,34 @@ public class Main_Window : GameWindow
         GL.Enable(EnableCap.DepthTest);
         Random rand = new();
 
-        vertices = GridGen();//new VertexPositionColor[] {
-            /*new(new(-.5f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //front plane
-            new(new( .0f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new( .0f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new(-.5f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            
-            new(new(-.5f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //back plane
-            new(new( .0f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new( .0f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new(-.5f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f))*/
-            
-            /*new (new Vector3(-1f,  1f, 0.0f), new Color4(  1.0f, 0.0f, 0.0f, 1.0f)),
-            new (new Vector3( 1f,  1f, 0.0f), new Color4( 0.0f, 1.0f, 0.0f, 1.0f)),
-            new (new Vector3(-1f, -1f, 0.0f), new Color4(0.0f, 0.0f, 1.0f, 1.0f)),
-            
-            new (new Vector3(-1f, -1f, 0.0f), new Color4(0.0f, 0.0f, 1.0f, 1.0f)),
-            new (new Vector3(1f,  1f, 0.0f), new Color4( 0.0f, 1.0f, 0.0f, 1.0f)),
-            new (new Vector3(1f, -1f, 0.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f))*/
+        Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
+        
+        _vertices = new VertexPositionColor[2000];
+        /*new(new(-.5f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //front plane
+        new(new( .0f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+        new(new( .0f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+        new(new(-.5f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+        
+        new(new(-.5f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //back plane
+        new(new( .0f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+        new(new( .0f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+        new(new(-.5f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f))*/
+        int k = 0;
+        for (float i = 0; i < 20; i += 0.001f)
+        {
+            Vector3 position = Vector3.Zero;
+            exp.Parameters["x"] = i;
+            position.X = i;
+            for (float j = 0; j < 20; j += 0.001f)
+            {
+                exp.Parameters["y"] = j;
+                position.Z = j;
+                position.Y = (float) Convert.ToDouble(exp.Evaluate().ToString());
+                _vertices[k++] = new VertexPositionColor(position,//BUG: one right here!
+                    new Color4((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f));
+            }
 
-        //};
+        }
 
         /*Expression e = new Expression(f, EvaluateOptions.IgnoreCase);
         vertices = new VertexPositionColor[4000];
@@ -119,21 +126,22 @@ public class Main_Window : GameWindow
             6, 7, 3
         };
 
-        vertexBuffer = new(VertexPositionColor.VertexInfo, vertices.Length);
-        vertexBuffer.SetData(vertices, vertices.Length);
+        _vertexBuffer = new VertexBuffer(VertexPositionColor.VertexInfo, _vertices.Length);
+        _vertexBuffer.SetData(_vertices, _vertices.Length);
 
-        indexBuffer = new(indices.Length);
-        indexBuffer.SetData(indices, indices.Length);
+        _indexBuffer = new IndexBuffer(indices.Length);
+        _indexBuffer.SetData(indices, indices.Length);
 
-        vertexArray = new(vertexBuffer);
-        shaderProgram = new(File.ReadAllText("testvert.glsl"), File.ReadAllText("testfrag.glsl"));
+        _vertexArray = new VertexArray(_vertexBuffer);
+        _shaderProgram = new ShaderProgram(File.ReadAllText("vert.glsl"), File.ReadAllText("frag.glsl"));
     }
 
     protected override void OnUnload()
     {
-        vertexArray.Dispose();
-        indexBuffer.Dispose();
-        vertexBuffer.Dispose();
+        _vertexArray.Dispose();
+        _indexBuffer.Dispose();
+        _vertexBuffer.Dispose();
+        _shaderProgram.Dispose();
         
         base.OnUnload();
     }
@@ -162,24 +170,23 @@ public class Main_Window : GameWindow
     protected override void OnRenderFrame(FrameEventArgs args)
     {
         base.OnRenderFrame(args);
-        _time += 4.0 * args.Time;
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        GL.UseProgram(shaderProgram.ShaderProgramHandle);
-        GL.BindVertexArray(vertexArray.VertexArrayHandle);
+        GL.UseProgram(_shaderProgram.ShaderProgramHandle);
+        GL.BindVertexArray(_vertexArray.VertexArrayHandle);
         //GL.BindBuffer(BufferTarget.ElementArrayBuffer,indexBuffer.IndexBufferHandle);
-        GL.BindBuffer(BufferTarget.ArrayBuffer,vertexBuffer.VertexBufferHandle);
+        GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
         Matrix4 model = Matrix4.Identity;
-        Matrix4 projection = cam.GetProjectionMatrix();
-        Matrix4 view = cam.GetViewMatrix();
+        Matrix4 projection = _cam.GetProjectionMatrix();
+        Matrix4 view = _cam.GetViewMatrix();
 
-        shaderProgram.SetUniform("view", view);
-        shaderProgram.SetUniform("model", model);
-        shaderProgram.SetUniform("projection", projection);
+        _shaderProgram.SetUniform("view", view);
+        _shaderProgram.SetUniform("model", model);
+        _shaderProgram.SetUniform("projection", projection);
         
         //GL.DrawElements(PrimitiveType.Triangles, 36,DrawElementsType.UnsignedInt, 0);
         //GL.PointSize(8);
-        GL.DrawArrays(PrimitiveType.Lines, 0, vertices.Length);
+        GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
         Context.SwapBuffers();
     }
     
@@ -188,32 +195,32 @@ public class Main_Window : GameWindow
  
         if (IsKeyDown(Keys.W))
         {
-            cam.Position += cam.Front * camSpeed * (float)e.Time;
+            _cam.Position += _cam.Front * camSpeed * (float)e.Time;
         }
  
         if (IsKeyDown(Keys.S))
         {
-            cam.Position -= cam.Front * camSpeed * (float)e.Time;
+            _cam.Position -= _cam.Front * camSpeed * (float)e.Time;
         }
  
         if (IsKeyDown(Keys.A))
         {
-            cam.Position -= cam.Right * camSpeed * (float)e.Time;
+            _cam.Position -= _cam.Right * camSpeed * (float)e.Time;
         }
  
         if (IsKeyDown(Keys.D))
         {
-            cam.Position += cam.Right * camSpeed * (float)e.Time;
+            _cam.Position += _cam.Right * camSpeed * (float)e.Time;
         }
  
         if (IsKeyDown(Keys.Space))
         {
-            cam.Position += cam.Up * camSpeed * (float)e.Time;
+            _cam.Position += _cam.Up * camSpeed * (float)e.Time;
         }
  
         if (IsKeyDown(Keys.LeftShift))
         {
-            cam.Position -= cam.Up * camSpeed * (float)e.Time;
+            _cam.Position -= _cam.Up * camSpeed * (float)e.Time;
         }
     }
 
@@ -232,8 +239,8 @@ public class Main_Window : GameWindow
             _lastPos = new Vector2(MouseState.X, MouseState.Y);
 
             // Apply the camera pitch and yaw (we clamp the pitch in the camera class)
-            cam.Yaw += deltaX * sensitivity;
-            cam.Pitch -= deltaY * sensitivity; // Reversed since y-coordinates range from bottom to top
+            _cam.Yaw += deltaX * sensitivity;
+            _cam.Pitch -= deltaY * sensitivity; // Reversed since y-coordinates range from bottom to top
         }
     }
     
@@ -241,48 +248,7 @@ public class Main_Window : GameWindow
     {
         base.OnMouseWheel(e);
 
-        cam.Fov -= e.OffsetY;
+        _cam.Fov -= e.OffsetY;
     }
 
-
-    private VertexPositionColor[] GridGen()
-    {
-        const int gridSize = 1024;
-        var gridLines = new List<VertexPositionColor>();
-        for (var y = -gridSize; y <= gridSize; y++)
-        {
-            var color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
-            if (y % 10 == 0)
-            {
-                color = new Color4(0.4f, 0.4f, 0.4f, 1.0f);
-            }
-            
-            if (y == 0)
-            {
-                color = new Color4(0.8f, 0.2f, 0.2f, 1);
-            }
-            
-            gridLines.Add(new VertexPositionColor(new Vector3(y, 0, -gridSize), color));
-            gridLines.Add(new VertexPositionColor(new Vector3(y, 0, gridSize), color));
-        }
-        
-        for (var x = -gridSize; x <= gridSize; x++)
-        {
-            var color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
-            if (x % 10 == 0)
-            {
-                color = new Color4(0.4f, 0.4f, 0.4f, 1.0f);
-            }
-
-            if (x == 0)
-            {
-                color = new Color4(0.2f, 0.2f, 0.8f, 1);
-            }
-            
-            gridLines.Add(new VertexPositionColor(new Vector3(-gridSize, 0, x), color));
-            gridLines.Add(new VertexPositionColor(new Vector3(gridSize, 0, x), color));
-        }
-
-        return gridLines.ToArray();
-    }
 }

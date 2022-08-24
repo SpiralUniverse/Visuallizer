@@ -33,18 +33,18 @@ public readonly struct ShaderUniform
 
 public sealed class ShaderProgram : IDisposable
 {
-    private bool disposed;
+    private bool _disposed;
 
     public readonly int ShaderProgramHandle;
     public readonly int VertexShaderHandle;
     public readonly int PixelShaderHandle;
 
-    private readonly ShaderUniform[] uniforms;
-    private readonly ShaderAttribute[] attributes;
+    private readonly ShaderUniform[] _uniforms;
+    private readonly ShaderAttribute[] _attributes;
 
     public ShaderProgram(string vertexShaderCode, string pixelShaderCode)
     {
-        disposed = false;
+        _disposed = false;
 
         if (!CompileVertexShader(vertexShaderCode, out VertexShaderHandle, out string vertexShaderCompileError))
         {
@@ -58,8 +58,8 @@ public sealed class ShaderProgram : IDisposable
 
         ShaderProgramHandle = CreateLinkProgram(VertexShaderHandle, PixelShaderHandle);
 
-        uniforms = CreateUniformList(ShaderProgramHandle);
-        attributes = CreateAttributeList(ShaderProgramHandle);
+        _uniforms = CreateUniformList(ShaderProgramHandle);
+        _attributes = CreateAttributeList(ShaderProgramHandle);
     }
 
     ~ShaderProgram()
@@ -69,7 +69,7 @@ public sealed class ShaderProgram : IDisposable
 
     public void Dispose()
     {
-        if (disposed)
+        if (_disposed)
         {
             return;
         }
@@ -80,21 +80,21 @@ public sealed class ShaderProgram : IDisposable
         GL.UseProgram(0);
         GL.DeleteProgram(ShaderProgramHandle);
 
-        disposed = true;
+        _disposed = true;
         GC.SuppressFinalize(this);
     }
 
     public ShaderUniform[] GetUniformList()
     {
-        ShaderUniform[] result = new ShaderUniform[uniforms.Length];
-        Array.Copy(uniforms, result, uniforms.Length);
+        ShaderUniform[] result = new ShaderUniform[_uniforms.Length];
+        Array.Copy(_uniforms, result, _uniforms.Length);
         return result;
     }
 
     public ShaderAttribute[] GetAttributeList()
     {
-        ShaderAttribute[] result = new ShaderAttribute[attributes.Length];
-        Array.Copy(attributes, result, attributes.Length);
+        ShaderAttribute[] result = new ShaderAttribute[_attributes.Length];
+        Array.Copy(_attributes, result, _attributes.Length);
         return result;
     }
 
@@ -171,9 +171,9 @@ public sealed class ShaderProgram : IDisposable
     {
         uniform = new ShaderUniform();
 
-        for (int i = 0; i < uniforms.Length; i++)
+        for (int i = 0; i < _uniforms.Length; i++)
         {
-            uniform = uniforms[i];
+            uniform = _uniforms[i];
 
             if (name == uniform.Name)
             {

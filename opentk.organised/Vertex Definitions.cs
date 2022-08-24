@@ -45,7 +45,7 @@ public readonly struct VertexPositionColor
     public readonly Vector3 Position;
     public readonly Color4 Color;
 
-    public static readonly VertexInfo VertexInfo = new VertexInfo(
+    public static readonly VertexInfo VertexInfo = new(
         typeof(VertexPositionColor),
         new VertexAttribute("Position", 0, 3, 0),
         new VertexAttribute("Color", 1, 4, 3 * sizeof(float))
@@ -63,7 +63,7 @@ public readonly struct VertexPositionTexture
     public readonly Vector3 Position;
     public readonly Vector2 TexCoord;
 
-    public static readonly VertexInfo VertexInfo = new VertexInfo(
+    public static readonly VertexInfo VertexInfo = new(
         typeof(VertexPositionTexture),
         new VertexAttribute("Position", 0, 3, 0),
         new VertexAttribute("TexCoord", 1, 2, 2 * sizeof(float))
