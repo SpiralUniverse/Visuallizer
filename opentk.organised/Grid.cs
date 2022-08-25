@@ -24,7 +24,7 @@ public class Grid
     public Grid(uint gridSize)
     {
         _gridSize = gridSize;
-        _gridVertices = new VertexPositionColor[_gridSize * 4];
+        _gridVertices = new VertexPositionColor[_gridSize * 8 + 2];
         _color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
         GridGen();
         Initiate();
@@ -51,9 +51,10 @@ public class Grid
 
     private void GridGen()
     {
-        _color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
+        var vert = 0;
         for (var y = -_gridSize; y <= _gridSize; y++)
         {
+            _color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
             if (y % 10 == 0)
             {
                 _color = new Color4(0.4f, 0.4f, 0.4f, 1.0f);
@@ -63,8 +64,9 @@ public class Grid
             {
                 _color = new Color4(0.8f, 0.2f, 0.2f, 1);
             }
-            _gridVertices[y + _gridSize] = new VertexPositionColor(new Vector3(y, 0, -_gridSize), _color);
-            _gridVertices[y + _gridSize + 1] = new VertexPositionColor(new Vector3(y, 0, _gridSize), _color);
+            
+            _gridVertices[vert++] = new VertexPositionColor(new Vector3(y, 0, -_gridSize), _color);
+            _gridVertices[vert++] = new VertexPositionColor(new Vector3(y, 0, _gridSize), _color);
         }
 
         for (var x = -_gridSize; x < _gridSize; x++)
@@ -80,8 +82,8 @@ public class Grid
                 _color = new Color4(0.2f, 0.2f, 0.8f, 1);
             }
             
-            _gridVertices[x + _gridSize * 2] = new VertexPositionColor(new Vector3(-_gridSize, 0, x), _color);
-            _gridVertices[x + _gridSize * 2 + 1] = new VertexPositionColor(new Vector3(_gridSize, 0, x), _color);
+            _gridVertices[vert++] = new VertexPositionColor(new Vector3(-_gridSize, 0, x), _color);
+            _gridVertices[vert++] = new VertexPositionColor(new Vector3(_gridSize, 0, x), _color);
         }
     }
 
