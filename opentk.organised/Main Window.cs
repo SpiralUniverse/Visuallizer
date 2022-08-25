@@ -73,7 +73,7 @@ public class MainWindow : GameWindow
 
         Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
 
-        long _verticesCount = 20000;
+        long _verticesCount = 20_000;
         _vertices = new VertexPositionColor[_verticesCount];
 
         #region -> RecVerts <-
@@ -93,42 +93,42 @@ public class MainWindow : GameWindow
         
         
         int k = 0;
-        for (float i = 0; i < 10; i += 0.1f)
+        for (float i = -5; i < 5; i += 0.1f)
         {
             Vector3 position = Vector3.Zero;
             exp.Parameters["x"] = i;
             position.X = i;
-            for (float j = 0; j < 10; j += 0.1f)
+            for (float j = -5; j < 5; j += 0.1f)
             {
                 exp.Parameters["y"] = j;
                 position.Z = j;
                 position.Y = (float) Convert.ToDouble(exp.Evaluate().ToString());
+                //float color = position.Y / 2f;
                 _vertices[k++] = new VertexPositionColor(position,
-                    new Color4((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f));
-                Console.WriteLine(position.ToString());
+                    new Color4(i,j,position.Y, 1.0f));
+                Console.WriteLine("vertices " + position);
             }
 
         }
 
-        int[] indices = {
-            0, 1, 2, //front
-            2, 3, 0,
-            
-            1, 5, 6, //right
-            6, 2, 1,
-            
-            5, 4, 7, //back
-            7, 6, 5,
-            
-            4, 0, 3, //left
-            3, 7, 4,
-            
-            4, 5, 1, //up
-            1, 0, 4,
-            
-            3, 2, 6, //bottom
-            6, 7, 3
-        };
+        int[] indices = new int[20_000 * 6];
+
+        for (int i = 0, j = 0, zCount = 100; i < _vertices.Length; i++, j++)
+        {
+            if (i % zCount == 0 && i != 0) i++;
+            indices[j] = i;
+            Console.WriteLine(j);
+            indices[++j] = i + 1;
+            Console.WriteLine(j);
+            indices[++j] = i + zCount;
+            Console.WriteLine(j);
+            indices[++j] = i + zCount;
+            Console.WriteLine(j);
+            indices[++j] = i + 1;
+            Console.WriteLine(j);
+            indices[++j] = i + zCount + 1;
+            Console.WriteLine(j);
+        }
 
         _vertexBuffer = new VertexBuffer(VertexPositionColor.VertexInfo, _vertices.Length);
         _vertexBuffer.SetData(_vertices, _vertices.Length);
@@ -177,7 +177,6 @@ public class MainWindow : GameWindow
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
         
-        //GL.BindBuffer(BufferTarget.ElementArrayBuffer,indexBuffer.IndexBufferHandle);
         
         Matrix4 model = Matrix4.Identity;
         Matrix4 projection = _cam.GetProjectionMatrix();
@@ -187,15 +186,17 @@ public class MainWindow : GameWindow
         
         GL.UseProgram(_shaderProgram.ShaderProgramHandle);
         GL.BindVertexArray(_vertexArray.VertexArrayHandle);
-        GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
+        GL.BindBuffer(BufferTarget.ElementArrayBuffer,_indexBuffer.IndexBufferHandle);
+        //GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
         
         _shaderProgram.SetUniform("view", view);
         _shaderProgram.SetUniform("model", model);
         _shaderProgram.SetUniform("projection", projection);
 
-        //GL.DrawElements(PrimitiveType.Triangles, 36,DrawElementsType.UnsignedInt, 0);
-        GL.PointSize(8);
-        GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
+        GL.DrawElements(PrimitiveType.Triangles, _vertices.Length,DrawElementsType.UnsignedInt, 0);
+        GL.PointSize(7);
+        GL.LineWidth(2);
+        //GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
         Context.SwapBuffers();
     }
     
