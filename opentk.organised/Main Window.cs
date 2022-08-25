@@ -20,6 +20,7 @@ public class MainWindow : GameWindow
         private VertexPositionColor[] _vertices;
 
         private readonly Camera _cam;
+        private readonly Grid _grid;
         private Vector2 _lastPos;
         private bool _firstMove = true;
 
@@ -47,6 +48,7 @@ public class MainWindow : GameWindow
     { 
         CenterWindow();
         _cam = new Camera(Vector3.UnitY * 2, ClientSize.X / (float)ClientSize.Y);
+        _grid = new Grid(1024);
     }
 
     protected override void OnResize(ResizeEventArgs e)
@@ -70,40 +72,42 @@ public class MainWindow : GameWindow
         Random rand = new();
 
         Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
+
+        long _verticesCount = 20000;
+        _vertices = new VertexPositionColor[_verticesCount];
+
+        #region -> RecVerts <-
+
+            /*new(new(-.5f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //front plane
+            new(new( .0f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+            new(new( .0f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+            new(new(-.5f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+            
+            new(new(-.5f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //back plane
+            new(new( .0f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+            new(new( .0f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+            new(new(-.5f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f))*/
         
-        _vertices = new VertexPositionColor[2000];
-        /*new(new(-.5f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //front plane
-        new(new( .0f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-        new(new( .0f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-        new(new(-.5f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
+
+        #endregion
         
-        new(new(-.5f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //back plane
-        new(new( .0f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-        new(new( .0f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-        new(new(-.5f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f))*/
-        int k = 0;
-        for (float i = 0; i < 20; i += 0.001f)
+        
+        /*int k = 0;
+        for (float i = 0; i < 10; i += 0.1f)
         {
             Vector3 position = Vector3.Zero;
             exp.Parameters["x"] = i;
             position.X = i;
-            for (float j = 0; j < 20; j += 0.001f)
+            for (float j = 0; j < 10; j += 0.1f)
             {
                 exp.Parameters["y"] = j;
                 position.Z = j;
                 position.Y = (float) Convert.ToDouble(exp.Evaluate().ToString());
-                _vertices[k++] = new VertexPositionColor(position,//BUG: one right here!
+                _vertices[k++] = new VertexPositionColor(position,
                     new Color4((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f));
+                Console.WriteLine(position.ToString());
             }
 
-        }
-
-        /*Expression e = new Expression(f, EvaluateOptions.IgnoreCase);
-        vertices = new VertexPositionColor[4000];
-        for (int i = 0, j = -2000; i < 2000; i++, j++)
-        {
-            e.Parameters["x"] = j;
-            vertices[i] = new VertexPositionColor(new Vector3(j, (float)Convert.ToDouble(e.Evaluate()), 0.0f), Color4.Firebrick);
         }*/
 
         int[] indices = {
@@ -172,10 +176,13 @@ public class MainWindow : GameWindow
         base.OnRenderFrame(args);
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        GL.UseProgram(_shaderProgram.ShaderProgramHandle);
-        GL.BindVertexArray(_vertexArray.VertexArrayHandle);
+        
+        
+        //GL.UseProgram(_shaderProgram.ShaderProgramHandle);
+        //GL.BindVertexArray(_vertexArray.VertexArrayHandle);
         //GL.BindBuffer(BufferTarget.ElementArrayBuffer,indexBuffer.IndexBufferHandle);
-        GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
+        //GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
+        
         Matrix4 model = Matrix4.Identity;
         Matrix4 projection = _cam.GetProjectionMatrix();
         Matrix4 view = _cam.GetViewMatrix();
@@ -185,8 +192,9 @@ public class MainWindow : GameWindow
         _shaderProgram.SetUniform("projection", projection);
         
         //GL.DrawElements(PrimitiveType.Triangles, 36,DrawElementsType.UnsignedInt, 0);
-        //GL.PointSize(8);
-        GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
+        GL.PointSize(8);
+        _grid.DrawGrid();
+        //GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
         Context.SwapBuffers();
     }
     
