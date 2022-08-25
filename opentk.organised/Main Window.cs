@@ -20,7 +20,7 @@ public class MainWindow : GameWindow
         private VertexPositionColor[] _vertices;
 
         private readonly Camera _cam;
-        private readonly Grid _grid;
+        private Grid _grid;
         private Vector2 _lastPos;
         private bool _firstMove = true;
 
@@ -92,7 +92,7 @@ public class MainWindow : GameWindow
         #endregion
         
         
-        /*int k = 0;
+        int k = 0;
         for (float i = 0; i < 10; i += 0.1f)
         {
             Vector3 position = Vector3.Zero;
@@ -108,7 +108,7 @@ public class MainWindow : GameWindow
                 Console.WriteLine(position.ToString());
             }
 
-        }*/
+        }
 
         int[] indices = {
             0, 1, 2, //front
@@ -145,7 +145,6 @@ public class MainWindow : GameWindow
         _vertexArray.Dispose();
         _indexBuffer.Dispose();
         _vertexBuffer.Dispose();
-        _shaderProgram.Dispose();
         
         base.OnUnload();
     }
@@ -178,23 +177,25 @@ public class MainWindow : GameWindow
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
         
-        //GL.UseProgram(_shaderProgram.ShaderProgramHandle);
-        //GL.BindVertexArray(_vertexArray.VertexArrayHandle);
         //GL.BindBuffer(BufferTarget.ElementArrayBuffer,indexBuffer.IndexBufferHandle);
-        //GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
         
         Matrix4 model = Matrix4.Identity;
         Matrix4 projection = _cam.GetProjectionMatrix();
         Matrix4 view = _cam.GetViewMatrix();
 
+        _grid.DrawGrid(new Matrix4[] {view, model, projection});
+        
+        GL.UseProgram(_shaderProgram.ShaderProgramHandle);
+        GL.BindVertexArray(_vertexArray.VertexArrayHandle);
+        GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
+        
         _shaderProgram.SetUniform("view", view);
         _shaderProgram.SetUniform("model", model);
         _shaderProgram.SetUniform("projection", projection);
-        
+
         //GL.DrawElements(PrimitiveType.Triangles, 36,DrawElementsType.UnsignedInt, 0);
         GL.PointSize(8);
-        _grid.DrawGrid();
-        //GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
+        GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
         Context.SwapBuffers();
     }
     

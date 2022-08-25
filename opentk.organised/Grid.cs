@@ -28,7 +28,6 @@ public class Grid
         _color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
         GridGen();
         Initiate();
-        DrawGrid();
     }
 
     private void Initiate()
@@ -48,7 +47,6 @@ public class Grid
     {
         _vertexBuffer.Dispose();
         _vertexArray.Dispose();
-        _shaderProgram.Dispose();
     }
 
     private void GridGen()
@@ -87,11 +85,16 @@ public class Grid
         }
     }
 
-    public void DrawGrid()
+    public void DrawGrid(Matrix4[] mat)
     {
         GL.UseProgram(_shaderProgram.ShaderProgramHandle);
         GL.BindVertexArray(_vertexArray.VertexArrayHandle);
         GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer.VertexBufferHandle);
+        
+        _shaderProgram.SetUniform("view", mat[0]);
+        _shaderProgram.SetUniform("model", mat[1]);
+        _shaderProgram.SetUniform("projection", mat[2]);
+
         GL.DrawArrays(PrimitiveType.Lines, 0, _gridVertices.Length);
     }
 }
