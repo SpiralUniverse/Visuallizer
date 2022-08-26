@@ -63,7 +63,7 @@ public class MainWindow : GameWindow
     {
         base.OnLoad();
 
-        string f = "sin(x) + cos(y)";//Console.ReadLine();
+        string _function = " cos(x) * sin(x + y)";//Console.ReadLine();
         IsVisible = true;
         CursorState = CursorState.Grabbed;
         
@@ -71,10 +71,10 @@ public class MainWindow : GameWindow
         GL.Enable(EnableCap.DepthTest);
         Random rand = new();
 
-        Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
-
-        const double resolution = 0.01;
-        const double extents = 5;
+        //Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
+        
+        const double resolution = 0.1;
+        const double extents = 50;
 
         long verticesCount = 0;
 
@@ -88,21 +88,6 @@ public class MainWindow : GameWindow
 
         _vertices = new Position2D[verticesCount];
 
-        #region -> RecVerts <-
-
-            /*new(new(-.5f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //front plane
-            new(new( .0f,  .5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new( .0f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new(-.5f, -.5f, .0f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            
-            new(new(-.5f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),  //back plane
-            new(new( .0f,  .5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new( .0f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f)),
-            new(new(-.5f, -.5f, -.5f), new((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f))*/
-        
-
-        #endregion
-        
         var k = 0;
         for (var i = -extents; i < extents; i += resolution)
         {
@@ -123,7 +108,7 @@ public class MainWindow : GameWindow
         _vertexBuffer.SetData(_vertices, _vertices.Length);
 
         _vertexArray = new VertexArray(_vertexBuffer);
-        _shaderProgram = new ShaderProgram(File.ReadAllText("vert.glsl"), File.ReadAllText("frag.glsl"));
+        _shaderProgram = new ShaderProgram(File.ReadAllText("vert.glsl").Replace("/*return function*/", _function), File.ReadAllText("frag.glsl"));
     }
 
     protected override void OnUnload()
@@ -219,6 +204,8 @@ public class MainWindow : GameWindow
         {
             Environment.Exit(0);
         }
+
+        CursorState = CursorState.Normal;
     }
 
     private void ProcessMouse(ref float sensitivity)
