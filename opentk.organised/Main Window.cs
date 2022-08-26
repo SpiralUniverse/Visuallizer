@@ -17,7 +17,7 @@ public class MainWindow : GameWindow
         private IndexBuffer _indexBuffer;
         private VertexArray _vertexArray;
         private ShaderProgram _shaderProgram;
-        private VertexPositionColor[] _vertices;
+        private Position2D[] _vertices;
 
         private readonly Camera _cam;
         private Grid _grid;
@@ -73,8 +73,20 @@ public class MainWindow : GameWindow
 
         Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
 
-        long _verticesCount = 20_000;
-        _vertices = new VertexPositionColor[_verticesCount];
+        const double resolution = 0.01;
+        const double extents = 5;
+
+        long verticesCount = 0;
+
+        for (var i = -extents; i < extents; i += resolution)
+        {
+            for (var j = -extents; j < extents; j += resolution)
+            {
+                verticesCount += 6;
+            }
+        }
+
+        _vertices = new Position2D[verticesCount];
 
         #region -> RecVerts <-
 
@@ -91,50 +103,24 @@ public class MainWindow : GameWindow
 
         #endregion
         
-        
-        int k = 0;
-        for (float i = -5; i < 5; i += 0.1f)
+        var k = 0;
+        for (var i = -extents; i < extents; i += resolution)
         {
-            Vector3 position = Vector3.Zero;
-            exp.Parameters["x"] = i;
-            position.X = i;
-            for (float j = -5; j < 5; j += 0.1f)
+            for (var j = -extents; j < extents; j += resolution)
             {
-                exp.Parameters["y"] = j;
-                position.Z = j;
-                position.Y = (float) Convert.ToDouble(exp.Evaluate().ToString());
-                //float color = position.Y / 2f;
-                _vertices[k++] = new VertexPositionColor(position,
-                    new Color4(i,j,position.Y, 1.0f));
-                Console.WriteLine("vertices " + position);
+                _vertices[k++] = new Position2D(new Vector2((float)i, (float)j));
+                _vertices[k++] = new Position2D(new Vector2((float)i + 0.1f, (float)j));
+                _vertices[k++] = new Position2D(new Vector2((float)i, (float)j + 0.1f));
+
+                _vertices[k++] = new Position2D(new Vector2((float)i + 0.1f, (float)j));
+                _vertices[k++] = new Position2D(new Vector2((float)i + 0.1f, (float)j + 0.1f));
+                _vertices[k++] = new Position2D(new Vector2((float)i, (float)j + 0.1f));
             }
-
         }
+        
 
-        int[] indices = new int[20_000 * 6];
-
-        for (int i = 0, j = 0, zCount = 100; i < _vertices.Length; i++, j++)
-        {
-            if (i % zCount == 0 && i != 0) i++;
-            indices[j] = i;
-            Console.WriteLine(j);
-            indices[++j] = i + 1;
-            Console.WriteLine(j);
-            indices[++j] = i + zCount;
-            Console.WriteLine(j);
-            indices[++j] = i + zCount;
-            Console.WriteLine(j);
-            indices[++j] = i + 1;
-            Console.WriteLine(j);
-            indices[++j] = i + zCount + 1;
-            Console.WriteLine(j);
-        }
-
-        _vertexBuffer = new VertexBuffer(VertexPositionColor.VertexInfo, _vertices.Length);
+        _vertexBuffer = new VertexBuffer(Position2D.VertexInfo, _vertices.Length);
         _vertexBuffer.SetData(_vertices, _vertices.Length);
-
-        _indexBuffer = new IndexBuffer(indices.Length);
-        _indexBuffer.SetData(indices, indices.Length);
 
         _vertexArray = new VertexArray(_vertexBuffer);
         _shaderProgram = new ShaderProgram(File.ReadAllText("vert.glsl"), File.ReadAllText("frag.glsl"));
@@ -176,27 +162,23 @@ public class MainWindow : GameWindow
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
-        
-        
-        Matrix4 model = Matrix4.Identity;
-        Matrix4 projection = _cam.GetProjectionMatrix();
-        Matrix4 view = _cam.GetViewMatrix();
+        var model = Matrix4.Identity;
+        var projection = _cam.GetProjectionMatrix();
+        var view = _cam.GetViewMatrix();
 
         _grid.DrawGrid(new Matrix4[] {view, model, projection});
         
         GL.UseProgram(_shaderProgram.ShaderProgramHandle);
         GL.BindVertexArray(_vertexArray.VertexArrayHandle);
-        GL.BindBuffer(BufferTarget.ElementArrayBuffer,_indexBuffer.IndexBufferHandle);
-        //GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
+        GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
         
         _shaderProgram.SetUniform("view", view);
         _shaderProgram.SetUniform("model", model);
         _shaderProgram.SetUniform("projection", projection);
-
-        GL.DrawElements(PrimitiveType.Triangles, _vertices.Length,DrawElementsType.UnsignedInt, 0);
+        
         GL.PointSize(7);
         GL.LineWidth(2);
-        //GL.DrawArrays(PrimitiveType.Points, 0, _vertices.Length);
+        GL.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Length);
         Context.SwapBuffers();
     }
     
@@ -231,6 +213,11 @@ public class MainWindow : GameWindow
         if (IsKeyDown(Keys.LeftShift))
         {
             _cam.Position -= _cam.Up * camSpeed * (float)e.Time;
+        }
+
+        if (IsKeyDown(Keys.Escape))
+        {
+            Environment.Exit(0);
         }
     }
 

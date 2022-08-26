@@ -58,6 +58,22 @@ public readonly struct VertexPositionColor
     }
 }
 
+public readonly struct Position2D
+{
+    public readonly Vector2 Position;
+    public static readonly VertexInfo VertexInfo = new(
+        typeof(Position2D),
+        new VertexAttribute("Position", 0, 2, 0)
+    );
+
+    public Position2D(Vector2 position)
+    {
+        Position = position;
+    }
+}
+
+
+
 public readonly struct VertexPositionTexture
 {
     public readonly Vector3 Position;
