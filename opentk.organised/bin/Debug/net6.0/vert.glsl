@@ -11,12 +11,6 @@ out vec4 vColor;
 
 float f(float x, float y)
 {
-    /*if(pow((x), 2) + pow((y), 2) - 5 > sin(x * 4) + cos(y * 4))
-    {
-        return 2 + sin(x * 4) + cos(y * 4);
-    }
-    return log(x) * sign(x);*/
-    
     return /*return function*/;
 }
 

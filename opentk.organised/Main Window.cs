@@ -63,46 +63,19 @@ public class MainWindow : GameWindow
     {
         base.OnLoad();
 
-        string _function = " cos(x) * sin(x + y)";//Console.ReadLine();
+        string _function = Console.ReadLine();
         IsVisible = true;
         CursorState = CursorState.Grabbed;
         
         GL.ClearColor(Color.Gray);
         GL.Enable(EnableCap.DepthTest);
-        Random rand = new();
-
-        //Expression exp = new Expression(f, EvaluateOptions.IgnoreCase);
         
         const double resolution = 0.1;
         const double extents = 50;
 
-        long verticesCount = 0;
-
-        for (var i = -extents; i < extents; i += resolution)
-        {
-            for (var j = -extents; j < extents; j += resolution)
-            {
-                verticesCount += 6;
-            }
-        }
-
-        _vertices = new Position2D[verticesCount];
-
-        var k = 0;
-        for (var i = -extents; i < extents; i += resolution)
-        {
-            for (var j = -extents; j < extents; j += resolution)
-            {
-                _vertices[k++] = new Position2D(new Vector2((float)i, (float)j));
-                _vertices[k++] = new Position2D(new Vector2((float)i + 0.1f, (float)j));
-                _vertices[k++] = new Position2D(new Vector2((float)i, (float)j + 0.1f));
-
-                _vertices[k++] = new Position2D(new Vector2((float)i + 0.1f, (float)j));
-                _vertices[k++] = new Position2D(new Vector2((float)i + 0.1f, (float)j + 0.1f));
-                _vertices[k++] = new Position2D(new Vector2((float)i, (float)j + 0.1f));
-            }
-        }
-        
+        Function fun = new Function(_function, resolution, new Vector2d(extents, extents));
+        fun.UpdateVertices();
+        _vertices = fun.Vertices;
 
         _vertexBuffer = new VertexBuffer(Position2D.VertexInfo, _vertices.Length);
         _vertexBuffer.SetData(_vertices, _vertices.Length);
