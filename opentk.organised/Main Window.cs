@@ -5,6 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using ImGuiNET;
 
 namespace opentk.organised;
 
@@ -12,12 +13,7 @@ public class MainWindow : GameWindow
 {
     
     #region -> Variables <-
-
-        private VertexBuffer _vertexBuffer;
-        private IndexBuffer _indexBuffer;
-        private VertexArray _vertexArray;
-        private ShaderProgram _shaderProgram;
-        private Position2D[] _vertices;
+    
 
         private readonly Camera _cam;
         private Grid _grid;
@@ -63,7 +59,6 @@ public class MainWindow : GameWindow
     {
         base.OnLoad();
 
-        string _function = Console.ReadLine();
         IsVisible = true;
         CursorState = CursorState.Grabbed;
         
@@ -73,23 +68,28 @@ public class MainWindow : GameWindow
         const double resolution = 0.1;
         const double extents = 50;
 
-        Function fun = new Function(_function, resolution, new Vector2d(extents, extents));
-        fun.UpdateVertices();
-        _vertices = fun.Vertices;
+        //Function fun1 = new Function(Guid.NewGuid(), "x - y", resolution, new Vector2d(extents, extents), Color4.Aqua);
+        int nb;
+        do
+        {
+            Console.WriteLine("pls enter a positive non zero integer that represent the nb of functions to draw!\nThe nb should be less than 10");
+            nb = Convert.ToInt32(Console.ReadLine());
+        } while (nb <= 0 || nb >= 10);
 
-        _vertexBuffer = new VertexBuffer(Position2D.VertexInfo, _vertices.Length);
-        _vertexBuffer.SetData(_vertices, _vertices.Length);
-
-        _vertexArray = new VertexArray(_vertexBuffer);
-        _shaderProgram = new ShaderProgram(File.ReadAllText("vert.glsl").Replace("/*return function*/", _function), File.ReadAllText("frag.glsl"));
+        for (int i = 0; i < nb; i++)
+        {
+            Console.WriteLine("pls input the function expression:");
+            Function function = new Function(Guid.NewGuid(), Console.ReadLine(), resolution, new Vector2d(extents, extents), Color4.Aqua);
+            //Note: the function ctr doesnt yet work with the color and similar fields
+        }
     }
 
     protected override void OnUnload()
     {
-        _vertexArray.Dispose();
-        _indexBuffer.Dispose();
-        _vertexBuffer.Dispose();
-        
+        foreach (Function function in Function.functionsList.Values)
+        {
+            function.Dispose();
+        }
         base.OnUnload();
     }
 
@@ -98,7 +98,7 @@ public class MainWindow : GameWindow
         if (!IsFocused) return;
         if(IsKeyDown(Keys.Escape)) Close();
         
-        float camSpeed = 1.5f;
+        float camSpeed = 2f;
         float sensitivity = 0.2f;
         
         base.OnUpdateFrame(args);
@@ -117,6 +117,8 @@ public class MainWindow : GameWindow
     protected override void OnRenderFrame(FrameEventArgs args)
     {
         base.OnRenderFrame(args);
+
+
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
@@ -125,18 +127,19 @@ public class MainWindow : GameWindow
         var view = _cam.GetViewMatrix();
 
         _grid.DrawGrid(new Matrix4[] {view, model, projection});
-        
-        GL.UseProgram(_shaderProgram.ShaderProgramHandle);
-        GL.BindVertexArray(_vertexArray.VertexArrayHandle);
-        GL.BindBuffer(BufferTarget.ArrayBuffer,_vertexBuffer.VertexBufferHandle);
-        
-        _shaderProgram.SetUniform("view", view);
-        _shaderProgram.SetUniform("model", model);
-        _shaderProgram.SetUniform("projection", projection);
+        foreach (Function function in Function.functionsList.Values)
+        {
+            GL.UseProgram(function._shaderProgram.ShaderProgramHandle);
+            GL.BindVertexArray(function._vertexArray.VertexArrayHandle);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, function._vertexArray.VertexArrayHandle);
+            function._shaderProgram.SetUniform("view", view);
+            function._shaderProgram.SetUniform("model", model);
+            function._shaderProgram.SetUniform("projection", projection);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, function.Vertices.Length);
+        }
         
         GL.PointSize(7);
         GL.LineWidth(2);
-        GL.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Length);
         Context.SwapBuffers();
     }
     
@@ -177,8 +180,6 @@ public class MainWindow : GameWindow
         {
             Environment.Exit(0);
         }
-
-        CursorState = CursorState.Normal;
     }
 
     private void ProcessMouse(ref float sensitivity)

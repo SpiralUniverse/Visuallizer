@@ -34,3 +34,8 @@ D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Antlr3.R
 D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\NCalc.dll
 D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Grid Frag.glsl
 D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Grid Vert.glsl
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\ImGui.NET.dll
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\linux-x64\native\libcimgui.so
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\osx-universal\native\libcimgui.dylib
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\win-x64\native\cimgui.dll
+D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\win-x86\native\cimgui.dll

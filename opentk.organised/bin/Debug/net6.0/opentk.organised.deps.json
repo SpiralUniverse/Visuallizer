@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "opentk.organised/1.0.0": {
         "dependencies": {
+          "ImGui.NET": "1.87.3",
           "NCalcSync": "3.5.0",
           "OpenTK": "4.7.4"
         },
@@ -23,6 +24,41 @@
           "lib/netstandard1.1/Antlr3.Runtime.dll": {
             "assemblyVersion": "3.5.0.2",
             "fileVersion": "3.5.1.0"
+          }
+        }
+      },
+      "ImGui.NET/1.87.3": {
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.Numerics.Vectors": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "5.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/ImGui.NET.dll": {
+            "assemblyVersion": "1.87.3.0",
+            "fileVersion": "1.87.3.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libcimgui.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-universal/native/libcimgui.dylib": {
+            "rid": "osx-universal",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/cimgui.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/cimgui.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -262,15 +298,7 @@
           "System.Runtime": "4.1.0"
         }
       },
-      "System.Buffers/4.0.0": {
-        "dependencies": {
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Diagnostics.Tracing": "4.1.0",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Threading": "4.0.11"
-        }
-      },
+      "System.Buffers/4.4.0": {},
       "System.Collections/4.0.11": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -385,7 +413,7 @@
       },
       "System.IO.Compression.ZipFile/4.0.1": {
         "dependencies": {
-          "System.Buffers": "4.0.0",
+          "System.Buffers": "4.4.0",
           "System.IO": "4.1.0",
           "System.IO.Compression": "4.1.0",
           "System.IO.FileSystem": "4.0.1",
@@ -491,6 +519,7 @@
           "System.Threading.Tasks": "4.0.11"
         }
       },
+      "System.Numerics.Vectors/4.4.0": {},
       "System.ObjectModel/4.0.12": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -837,6 +866,13 @@
       "path": "antlr3.runtime/3.5.1",
       "hashPath": "antlr3.runtime.3.5.1.nupkg.sha512"
     },
+    "ImGui.NET/1.87.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pYKUrXtvinMZiWToAzGhAGXscPr1B/NVVADbfbBlpl9waaVtB/7q9Zx07HyjivE44f8u1W1L++iwwfrCS3Sw3w==",
+      "path": "imgui.net/1.87.3",
+      "hashPath": "imgui.net.1.87.3.nupkg.sha512"
+    },
     "Microsoft.NETCore.Platforms/1.0.1": {
       "type": "package",
       "serviceable": true,
@@ -984,12 +1020,12 @@
       "path": "system.appcontext/4.1.0",
       "hashPath": "system.appcontext.4.1.0.nupkg.sha512"
     },
-    "System.Buffers/4.0.0": {
+    "System.Buffers/4.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-msXumHfjjURSkvxUjYuq4N2ghHoRi2VpXcKMA7gK6ujQfU3vGpl+B6ld0ATRg+FZFpRyA6PgEPA+VlIkTeNf2w==",
-      "path": "system.buffers/4.0.0",
-      "hashPath": "system.buffers.4.0.0.nupkg.sha512"
+      "sha512": "sha512-AwarXzzoDwX6BgrhjoJsk6tUezZEozOT5Y9QKF94Gl4JK91I4PIIBkBco9068Y9/Dra8Dkbie99kXB8+1BaYKw==",
+      "path": "system.buffers/4.4.0",
+      "hashPath": "system.buffers.4.4.0.nupkg.sha512"
     },
     "System.Collections/4.0.11": {
       "type": "package",
@@ -1130,6 +1166,13 @@
       "sha512": "sha512-xAz0N3dAV/aR/9g8r0Y5oEqU1JRsz29F5EGb/WVHmX3jVSLqi2/92M5hTad2aNWovruXrJpJtgZ9fccPMG9uSw==",
       "path": "system.net.sockets/4.1.0",
       "hashPath": "system.net.sockets.4.1.0.nupkg.sha512"
+    },
+    "System.Numerics.Vectors/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UiLzLW+Lw6HLed1Hcg+8jSRttrbuXv7DANVj0DkL9g6EnnzbL75EB7EWsw5uRbhxd/4YdG8li5XizGWepmG3PQ==",
+      "path": "system.numerics.vectors/4.4.0",
+      "hashPath": "system.numerics.vectors.4.4.0.nupkg.sha512"
     },
     "System.ObjectModel/4.0.12": {
       "type": "package",

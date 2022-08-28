@@ -6,5 +6,6 @@ internal static class EnterPoint
     {
         using MainWindow mainWindow = new MainWindow();
         mainWindow.Run();
+        
     }
 }

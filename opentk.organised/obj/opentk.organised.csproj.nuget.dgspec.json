@@ -44,6 +44,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "ImGui.NET": {
+              "target": "Package",
+              "version": "[1.87.3, )"
+            },
             "NCalcSync": {
               "target": "Package",
               "version": "[3.5.0, )"
