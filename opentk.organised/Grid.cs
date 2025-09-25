@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using System.IO;
 
 namespace opentk.organised;
 
@@ -15,9 +16,9 @@ public class Grid
         public Color4 Color => _color;
         
         private readonly VertexPositionColor[] _gridVertices;
-        private VertexArray _vertexArray;
-        private VertexBuffer _vertexBuffer;
-        private ShaderProgram _shaderProgram;
+        private VertexArray _vertexArray = null!;
+        private VertexBuffer _vertexBuffer = null!;
+        private ShaderProgram _shaderProgram = null!;
 
     #endregion
 
@@ -54,15 +55,17 @@ public class Grid
         var vert = 0;
         for (var y = -_gridSize; y <= _gridSize; y++)
         {
-            _color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
+            // Subtle grid lines - much easier on the eyes
+            _color = new Color4(0.15f, 0.18f, 0.22f, 0.6f); // Subtle blue-gray
             if (y % 10 == 0)
             {
-                _color = new Color4(0.4f, 0.4f, 0.4f, 1.0f);
+                _color = new Color4(0.25f, 0.28f, 0.32f, 0.8f); // Slightly brighter for major lines
             }
             
             if (y == 0)
             {
-                _color = new Color4(0.8f, 0.2f, 0.2f, 1);
+                // Elegant X-axis in soft red
+                _color = new Color4(0.6f, 0.3f, 0.3f, 0.9f);
             }
             
             _gridVertices[vert++] = new VertexPositionColor(new Vector3(y, 0, -_gridSize), _color);
@@ -71,15 +74,16 @@ public class Grid
 
         for (var x = -_gridSize; x < _gridSize; x++)
         {
-            _color = new Color4(0.2f, 0.2f, 0.2f, 1.0f);
+            _color = new Color4(0.15f, 0.18f, 0.22f, 0.6f);
             if (x % 10 == 0)
             {
-                _color = new Color4(0.4f, 0.4f, 0.4f, 1.0f);
+                _color = new Color4(0.25f, 0.28f, 0.32f, 0.8f);
             }
 
             if (x == 0)
             {
-                _color = new Color4(0.2f, 0.2f, 0.8f, 1);
+                // Elegant Z-axis in soft blue
+                _color = new Color4(0.3f, 0.4f, 0.6f, 0.9f);
             }
             
             _gridVertices[vert++] = new VertexPositionColor(new Vector3(-_gridSize, 0, x), _color);

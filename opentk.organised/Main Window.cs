@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using NCalc;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
@@ -32,8 +33,8 @@ public class MainWindow : GameWindow
         {
             Location = new Vector2i(910,540),
             Size = new Vector2i(1720,880),
-            Title = "Main Window",
-            WindowBorder = WindowBorder.Hidden,
+            Title = "Mathematical Function Visualizer - Professional Edition",
+            WindowBorder = WindowBorder.Resizable,
             WindowState = WindowState.Normal,
             StartVisible = false,
             StartFocused = true,
@@ -43,7 +44,10 @@ public class MainWindow : GameWindow
         })
     { 
         CenterWindow();
-        _cam = new Camera(Vector3.UnitY * 2, ClientSize.X / (float)ClientSize.Y);
+        // Position camera to look down at the function from a good viewing angle
+        _cam = new Camera(new Vector3(20, 15, 20), ClientSize.X / (float)ClientSize.Y);
+        _cam.Pitch = -25f; // Look down at the function
+        _cam.Yaw = -135f;  // Angle to see the function nicely
         _grid = new Grid(1024);
     }
 
@@ -62,26 +66,97 @@ public class MainWindow : GameWindow
         IsVisible = true;
         CursorState = CursorState.Grabbed;
         
-        GL.ClearColor(Color.Gray);
+        // Professional dark theme background
+        GL.ClearColor(0.08f, 0.08f, 0.12f, 1.0f); // Dark blue-gray
         GL.Enable(EnableCap.DepthTest);
+        GL.DepthFunc(DepthFunction.Less);
+        GL.Enable(EnableCap.Blend);
+        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+        GL.Enable(EnableCap.LineSmooth);
+        GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
+        
+        // Additional anti-flickering settings
+        GL.Enable(EnableCap.PolygonOffsetFill);
+        GL.PolygonOffset(1.0f, 1.0f); // Prevent z-fighting
+        GL.DepthRange(0.0, 1.0);
         
         const double resolution = 0.1;
-        const double extents = 50;
+        const double extents = 200; // Extended for more "infinite" feel
 
         //Function fun1 = new Function(Guid.NewGuid(), "x - y", resolution, new Vector2d(extents, extents), Color4.Aqua);
         int nb;
+        Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║        Mathematical Function Visualizer v2.0              ║");
+        Console.WriteLine("║        Professional 3D Function Visualization             ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════╝");
+        Console.WriteLine();
+        
+        // Ask for input method
+        Console.WriteLine("Choose input method:");
+        Console.WriteLine("1. 📚 Use built-in function presets");
+        Console.WriteLine("2. ✏️  Enter custom mathematical expressions");
+        Console.Write("► Select option (1 or 2): ");
+        
+        string choice = Console.ReadLine() ?? "2";
+        bool usePresets = choice == "1";
+        
         do
         {
-            Console.WriteLine("pls enter a positive non zero integer that represent the nb of functions to draw!\nThe nb should be less than 10");
+            Console.WriteLine("\n📊 Enter the number of functions to visualize (1-9):");
+            Console.Write("► ");
             nb = Convert.ToInt32(Console.ReadLine());
+            if (nb <= 0 || nb >= 10)
+            {
+                Console.WriteLine("❌ Please enter a valid number between 1 and 9.\n");
+            }
         } while (nb <= 0 || nb >= 10);
+
+        Console.WriteLine();
+        
+        if (usePresets)
+        {
+            FunctionPresets.DisplayPresets();
+            Console.WriteLine($"Choose {nb} function(s) from the library above:");
+        }
 
         for (int i = 0; i < nb; i++)
         {
-            Console.WriteLine("pls input the function expression:");
-            Function function = new Function(Guid.NewGuid(), Console.ReadLine(), resolution, new Vector2d(extents, extents), Color4.Aqua);
-            //Note: the function ctr doesnt yet work with the color and similar fields
+            string expression;
+            
+            if (usePresets)
+            {
+                int totalPresets = FunctionPresets.GetTotalPresets();
+                int presetChoice;
+                do
+                {
+                    Console.Write($"► Select preset #{i + 1} (1-{totalPresets}): ");
+                    presetChoice = Convert.ToInt32(Console.ReadLine());
+                    if (presetChoice < 1 || presetChoice > totalPresets)
+                    {
+                        Console.WriteLine($"❌ Please enter a number between 1 and {totalPresets}");
+                    }
+                } while (presetChoice < 1 || presetChoice > totalPresets);
+                
+                var preset = FunctionPresets.GetPresetByIndex(presetChoice);
+                expression = preset?.Expression ?? "sin(x)*cos(y)";
+                Console.WriteLine($"✨ Selected: {preset?.Name} - {preset?.Description}");
+            }
+            else
+            {
+                Console.WriteLine($"🔢 Enter mathematical expression for function #{i + 1}:");
+                Console.WriteLine("   Examples: sin(x)*cos(y), x^2 + y^2, exp(-x^2-y^2)*cos(x*y)");
+                Console.Write("► f(x,y) = ");
+                expression = Console.ReadLine() ?? "sin(x)*cos(y)";
+            }
+            
+            Function function = new Function(Guid.NewGuid(), expression, resolution, new Vector2d(extents, extents), Color4.Aqua);
+            Console.WriteLine($"✅ Function #{i + 1} loaded successfully!\n");
         }
+        
+        Console.WriteLine("🚀 Launching 3D visualization...");
+        Console.WriteLine("🎮 Controls: WASD to move, Mouse to look around, ESC to exit");
+        Console.WriteLine("💾 Vertex data is automatically cached for faster loading next time!");
+        Console.WriteLine();
     }
 
     protected override void OnUnload()
@@ -126,20 +201,30 @@ public class MainWindow : GameWindow
         var projection = _cam.GetProjectionMatrix();
         var view = _cam.GetViewMatrix();
 
-        _grid.DrawGrid(new Matrix4[] {view, model, projection});
+        // Draw functions first (solid objects)
+        GL.Disable(EnableCap.Blend);
         foreach (Function function in Function.functionsList.Values)
         {
             GL.UseProgram(function._shaderProgram.ShaderProgramHandle);
             GL.BindVertexArray(function._vertexArray.VertexArrayHandle);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, function._vertexArray.VertexArrayHandle);
-            function._shaderProgram.SetUniform("view", view);
-            function._shaderProgram.SetUniform("model", model);
-            function._shaderProgram.SetUniform("projection", projection);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, function._vertexBuffer.VertexBufferHandle);
+            function.SetShaderUniforms(model, view, projection);
             GL.DrawArrays(PrimitiveType.Triangles, 0, function.Vertices.Length);
         }
         
-        GL.PointSize(7);
-        GL.LineWidth(2);
+        // Draw grid last (transparent overlay) with depth offset
+        GL.Enable(EnableCap.Blend);
+        GL.PolygonOffset(0.1f, 0.1f); // Small offset to prevent z-fighting
+        _grid.DrawGrid(new Matrix4[] {view, model, projection});
+        GL.PolygonOffset(1.0f, 1.0f); // Reset to default
+        
+        // Professional rendering settings
+        GL.PointSize(5);
+        GL.LineWidth(1.5f);
+        
+        // Enable multisampling for smoother edges if available
+        GL.Enable(EnableCap.Multisample);
+        
         Context.SwapBuffers();
     }
     

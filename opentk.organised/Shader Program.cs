@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using System;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace opentk.organised;
@@ -48,12 +49,16 @@ public sealed class ShaderProgram : IDisposable
 
         if (!CompileVertexShader(vertexShaderCode, out VertexShaderHandle, out string vertexShaderCompileError))
         {
-            throw new ArgumentException(vertexShaderCompileError);
+            Console.WriteLine($"Vertex Shader Compilation Error: {vertexShaderCompileError}");
+            Console.WriteLine($"Vertex Shader Source:\n{vertexShaderCode}");
+            throw new ArgumentException($"Vertex Shader Error: {vertexShaderCompileError}");
         }
 
         if (!CompilePixelShader(pixelShaderCode, out PixelShaderHandle, out string pixelShaderCompileError))
         {
-            throw new ArgumentException(pixelShaderCompileError);
+            Console.WriteLine($"Fragment Shader Compilation Error: {pixelShaderCompileError}");
+            Console.WriteLine($"Fragment Shader Source:\n{pixelShaderCode}");
+            throw new ArgumentException($"Fragment Shader Error: {pixelShaderCompileError}");
         }
 
         ShaderProgramHandle = CreateLinkProgram(VertexShaderHandle, PixelShaderHandle);

@@ -1,0 +1,23 @@
+# Build output
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+
+# Cache files
+*.cache
+
+# User specific files
+*.suo
+*.user
+.vs/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test files (keep them tracked)
+!*test*.txt
+!cool_functions.txt

@@ -1,0 +1,36 @@
+Cool Functions to Showcase the Heat Map System:
+
+1. Ripple Effect (Great for concentric heat map):
+   sin(sqrt(x*x + y*y)) * exp(-sqrt(x*x + y*y)/10)
+
+2. Mexican Hat Wavelet (Classic 3D peak):
+   (2 - (x*x + y*y)) * exp(-(x*x + y*y)/2)
+
+3. Complex Interference Pattern:
+   sin(x*y) + cos(x*x - y*y) * exp(-(x*x + y*y)/25)
+
+4. Mountain Range (Multi-scale terrain):
+   sin(x/2) * cos(y/3) + 0.5*sin(x*2) * cos(y*4) + 0.25*sin(x*4) * cos(y*8)
+
+5. Vortex Pattern (Spiral heat map):
+   sin(atan2(y,x)*3 + sqrt(x*x + y*y)) * (10/(1 + x*x + y*y))
+
+6. Saddle with High-Freq Detail:
+   (x*x - y*y) + 0.3*sin(x*5)*cos(y*5)
+
+7. Gaussian Peaks (Multiple heat centers):
+   exp(-(x-2)*(x-2) - (y-2)*(y-2)) + exp(-(x+2)*(x+2) - (y+2)*(y+2)) + exp(-x*x - y*y)*0.5
+
+8. Wave Interference:
+   sin(x*2 + y) + sin(x - y*2) + cos(x*y/3)
+
+9. Fractal-like Function:
+   sin(x) + sin(x*2)/2 + sin(x*4)/4 + cos(y) + cos(y*2)/2 + cos(y*4)/4
+
+10. Rose Pattern:
+    sin(6*atan2(y,x)) * sqrt(x*x + y*y) * exp(-sqrt(x*x + y*y)/5)
+
+Test these functions with different extents:
+- For detailed patterns: extents = 10-20
+- For broader views: extents = 50-100
+- For fine details: reduce resolution to 0.05 or lower
