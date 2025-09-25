@@ -95,10 +95,18 @@ public class MainWindow : GameWindow
         Console.WriteLine("Choose input method:");
         Console.WriteLine("1. 📚 Use built-in function presets");
         Console.WriteLine("2. ✏️  Enter custom mathematical expressions");
-        Console.Write("► Select option (1 or 2): ");
+        Console.WriteLine("3. 🧪 Test all preset functions (diagnostic mode)");
+        Console.Write("► Select option (1, 2, or 3): ");
         
         string choice = Console.ReadLine() ?? "2";
         bool usePresets = choice == "1";
+        bool testMode = choice == "3";
+        
+        if (testMode)
+        {
+            TestAllPresets();
+            return;
+        }
         
         do
         {
@@ -212,10 +220,12 @@ public class MainWindow : GameWindow
             GL.DrawArrays(PrimitiveType.Triangles, 0, function.Vertices.Length);
         }
         
-        // Draw grid last (transparent overlay) with depth offset
+        // Draw grid last (transparent overlay) with stronger depth offset
         GL.Enable(EnableCap.Blend);
-        GL.PolygonOffset(0.1f, 0.1f); // Small offset to prevent z-fighting
+        GL.DepthMask(false); // Don't write to depth buffer for grid
+        GL.PolygonOffset(-2.0f, -2.0f); // Stronger negative offset to push grid behind
         _grid.DrawGrid(new Matrix4[] {view, model, projection});
+        GL.DepthMask(true); // Re-enable depth writing
         GL.PolygonOffset(1.0f, 1.0f); // Reset to default
         
         // Professional rendering settings
@@ -292,6 +302,81 @@ public class MainWindow : GameWindow
         base.OnMouseWheel(e);
 
         _cam.Fov -= e.OffsetY;
+    }
+    
+    private void TestAllPresets()
+    {
+        Console.WriteLine("\n🧪 TESTING ALL PRESET FUNCTIONS");
+        Console.WriteLine("═══════════════════════════════════════════════════════════════");
+        
+        var presets = FunctionPresets.GetAllPresets();
+        var results = new List<(string Name, string Expression, bool Success, string? Error, long VertexCount, TimeSpan Duration)>();
+        
+        foreach (var (name, expression, description) in presets)
+        {
+            Console.WriteLine($"\n🔍 Testing: {name}");
+            Console.WriteLine($"   Expression: {expression}");
+            Console.WriteLine($"   Description: {description}");
+            
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                // Create test function with smaller extents for faster testing
+                var testFunction = new Function(
+                    Guid.NewGuid(), 
+                    expression, 
+                    resolution: 0.2, // Coarser resolution for testing
+                    extents: new Vector2d(50, 50), // Smaller area
+                    Color4.White
+                );
+                
+                stopwatch.Stop();
+                var vertexCount = testFunction.verticesCount;
+                
+                results.Add((name, expression, true, null, vertexCount, stopwatch.Elapsed));
+                Console.WriteLine($"   ✅ Success: {vertexCount:N0} vertices in {stopwatch.Elapsed.TotalSeconds:F2}s");
+                
+                // Clean up
+                testFunction.Dispose();
+            }
+            catch (Exception ex)
+            {
+                stopwatch.Stop();
+                results.Add((name, expression, false, ex.Message, 0, stopwatch.Elapsed));
+                Console.WriteLine($"   ❌ Failed: {ex.Message}");
+            }
+        }
+        
+        // Summary report
+        Console.WriteLine("\n📊 TEST SUMMARY REPORT");
+        Console.WriteLine("═══════════════════════════════════════════════════════════════");
+        
+        var successful = results.Where(r => r.Success).ToList();
+        var failed = results.Where(r => !r.Success).ToList();
+        
+        Console.WriteLine($"✅ Successful: {successful.Count}/{results.Count}");
+        Console.WriteLine($"❌ Failed: {failed.Count}/{results.Count}");
+        Console.WriteLine($"⚡ Average time: {results.Where(r => r.Success).Average(r => r.Duration.TotalSeconds):F2}s");
+        Console.WriteLine($"📊 Total vertices: {successful.Sum(r => r.VertexCount):N0}");
+        
+        if (failed.Any())
+        {
+            Console.WriteLine("\n❌ FAILED FUNCTIONS:");
+            foreach (var (name, expression, _, error, _, duration) in failed)
+            {
+                Console.WriteLine($"   • {name}: {error}");
+            }
+        }
+        
+        Console.WriteLine("\n⚡ PERFORMANCE RANKING (by generation time):");
+        foreach (var (name, _, _, _, vertexCount, duration) in successful.OrderBy(r => r.Duration))
+        {
+            Console.WriteLine($"   • {name}: {duration.TotalSeconds:F2}s ({vertexCount:N0} vertices)");
+        }
+        
+        Console.WriteLine($"\n💾 Cache location: {Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/MathVisualizer/Cache/");
+        Console.WriteLine("\nPress Enter to exit...");
+        Console.ReadLine();
     }
 
 }

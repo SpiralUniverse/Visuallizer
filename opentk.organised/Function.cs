@@ -158,20 +158,39 @@ public class Function : IDisposable
     
     private void GenerateAdaptiveVertices(List<Position2D> vertices)
     {
+        // Calculate total steps for progress tracking
+        var totalStepsX = (int)((extents.X * 2) / stepSize);
+        var totalStepsY = (int)((extents.Y * 2) / stepSize);
+        var totalSteps = totalStepsX * totalStepsY;
+        var currentStep = 0;
+        var lastProgressPercent = -1;
+
         for (var i = -extents.X; i < extents.X; i += stepSize)
         {
             for (var j = -extents.Y; j < extents.Y; j += stepSize)
             {
-                // Create initial quad corners
-                Vector2 topLeft = new Vector2((float)i, (float)j);
-                Vector2 topRight = new Vector2((float)(i + stepSize), (float)j);
-                Vector2 bottomLeft = new Vector2((float)i, (float)(j + stepSize));
-                Vector2 bottomRight = new Vector2((float)(i + stepSize), (float)(j + stepSize));
+                // Modern C# 13: Target-typed new expressions and collection expressions
+                Vector2[] corners = [
+                    new((float)i, (float)j),                    // topLeft
+                    new((float)(i + stepSize), (float)j),       // topRight
+                    new((float)i, (float)(j + stepSize)),       // bottomLeft
+                    new((float)(i + stepSize), (float)(j + stepSize)) // bottomRight
+                ];
                 
                 // Subdivide this quad recursively based on function complexity
-                SubdivideQuad(topLeft, topRight, bottomLeft, bottomRight, 4, vertices);
+                SubdivideQuad(corners[0], corners[1], corners[2], corners[3], 4, vertices);
+                
+                // Progress indication with modern string interpolation
+                currentStep++;
+                var progressPercent = (int)((double)currentStep / totalSteps * 100);
+                if (progressPercent != lastProgressPercent && progressPercent % 10 == 0)
+                {
+                    Console.Write($"\r🔄 Generating vertices... {progressPercent}% ({vertices.Count:N0} vertices so far)");
+                    lastProgressPercent = progressPercent;
+                }
             }
         }
+        Console.WriteLine(); // New line after progress
     }
     
     private void GenerateUniformVertices(List<Position2D> vertices)
@@ -242,37 +261,27 @@ public class Function : IDisposable
             expr.Parameters["x"] = (double)x;
             expr.Parameters["y"] = (double)y;
             
-            // Add common mathematical functions
+            // C# 13: Modern mathematical function handler with pattern matching
             expr.EvaluateFunction += (name, args) =>
             {
-                switch (name.ToLower())
+                var param1 = (double)args.Parameters[0].Evaluate();
+                var param2 = args.Parameters.Length > 1 ? (double)args.Parameters[1].Evaluate() : 0.0;
+                
+                args.Result = name.ToLower() switch
                 {
-                    case "sin":
-                        args.Result = Math.Sin((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "cos":
-                        args.Result = Math.Cos((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "tan":
-                        args.Result = Math.Tan((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "sqrt":
-                        args.Result = Math.Sqrt((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "abs":
-                        args.Result = Math.Abs((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "log":
-                        args.Result = Math.Log((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "exp":
-                        args.Result = Math.Exp((double)args.Parameters[0].Evaluate());
-                        break;
-                    case "pow":
-                        args.Result = Math.Pow((double)args.Parameters[0].Evaluate(), 
-                                              (double)args.Parameters[1].Evaluate());
-                        break;
-                }
+                    "sin" => Math.Sin(param1),
+                    "cos" => Math.Cos(param1),
+                    "tan" => Math.Tan(param1),
+                    "sqrt" => Math.Sqrt(param1),
+                    "abs" => Math.Abs(param1),
+                    "log" => Math.Log(param1),
+                    "exp" => Math.Exp(param1),
+                    "pow" => Math.Pow(param1, param2),
+                    "atan2" => Math.Atan2(param1, param2),
+                    "min" => Math.Min(param1, param2),
+                    "max" => Math.Max(param1, param2),
+                    _ => throw new ArgumentException($"Unknown function: {name}")
+                };
             };
             
             var result = expr.Evaluate();

@@ -49,6 +49,14 @@ vec4 heightToHeatMapColor(float height, float minH, float maxH) {
 void main() 
 { 
     float fx = f(aPosition.x, aPosition.y);
+    
+    // Ensure uniforms are always used to prevent optimization
+    float actualMin = minHeight;
+    float actualMax = maxHeight;
+    if (actualMin == actualMax) {
+        actualMax = actualMin + 1.0; // Prevent division by zero
+    }
+    
     gl_Position = vec4(aPosition.x, fx, aPosition.y, 1.0f) * model * view * projection;
-    vColor = heightToHeatMapColor(fx, minHeight, maxHeight);
+    vColor = heightToHeatMapColor(fx, actualMin, actualMax);
 }

@@ -1,41 +1,83 @@
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\opentk.organised.exe
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\opentk.organised.deps.json
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\opentk.organised.runtimeconfig.json
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\opentk.organised.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\opentk.organised.pdb
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Compute.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Core.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Graphics.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Input.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Mathematics.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.OpenAL.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Windowing.Common.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Windowing.Desktop.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\OpenTK.Windowing.GraphicsLibraryFramework.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\linux-x64\native\libglfw.so.3.3
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\osx-arm64\native\libglfw.3.dylib
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\osx-x64\native\libglfw.3.dylib
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\win-x64\native\glfw3.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\win-x86\native\glfw3.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.csproj.AssemblyReference.cache
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.GeneratedMSBuildEditorConfig.editorconfig
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.AssemblyInfoInputs.cache
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.AssemblyInfo.cs
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.csproj.CoreCompileInputs.cache
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.csproj.CopyComplete
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\refint\opentk.organised.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.pdb
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\opentk.organised.genruntimeconfig.cache
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\obj\Debug\net6.0\ref\opentk.organised.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\frag.glsl
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\vert.glsl
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Antlr3.Runtime.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\NCalc.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Grid Frag.glsl
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\Grid Vert.glsl
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\ImGui.NET.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\linux-x64\native\libcimgui.so
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\osx-universal\native\libcimgui.dylib
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\win-x64\native\cimgui.dll
-D:\Rider Projects\OpenTK.Learn.Window\opentk.organised\bin\Debug\net6.0\runtimes\win-x86\native\cimgui.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/opentk.organised.exe
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/opentk.organised.deps.json
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/opentk.organised.runtimeconfig.json
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/opentk.organised.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/opentk.organised.pdb
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Compute.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Core.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Graphics.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Input.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Mathematics.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.OpenAL.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Windowing.Common.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Windowing.Desktop.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/OpenTK.Windowing.GraphicsLibraryFramework.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/linux-x64/native/libglfw.so.3.3
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/osx-arm64/native/libglfw.3.dylib
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/osx-x64/native/libglfw.3.dylib
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/win-x64/native/glfw3.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/win-x86/native/glfw3.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.csproj.AssemblyReference.cache
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.GeneratedMSBuildEditorConfig.editorconfig
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.AssemblyInfoInputs.cache
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.AssemblyInfo.cs
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.csproj.CoreCompileInputs.cache
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.csproj.CopyComplete
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/refint/opentk.organised.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.pdb
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/opentk.organised.genruntimeconfig.cache
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/obj/Debug/net6.0/ref/opentk.organised.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/frag.glsl
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/vert.glsl
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/Antlr3.Runtime.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/NCalc.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/Grid Frag.glsl
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/Grid Vert.glsl
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/ImGui.NET.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/linux-x64/native/libcimgui.so
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/osx-universal/native/libcimgui.dylib
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/win-x64/native/cimgui.dll
+D:/Rider Projects/OpenTK.Learn.Window/opentk.organised/bin/Debug/net6.0/runtimes/win-x86/native/cimgui.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/opentk.organised
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/frag.glsl
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/Grid Frag.glsl
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/Grid Vert.glsl
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/vert.glsl
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/opentk.organised.deps.json
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/opentk.organised.runtimeconfig.json
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/opentk.organised.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/opentk.organised.pdb
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/Antlr3.Runtime.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/ImGui.NET.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/NCalc.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Compute.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Core.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Graphics.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Input.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Mathematics.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.OpenAL.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Windowing.Common.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Windowing.Desktop.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/OpenTK.Windowing.GraphicsLibraryFramework.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/linux-x64/native/libcimgui.so
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/osx-universal/native/libcimgui.dylib
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/win-x64/native/cimgui.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/win-x86/native/cimgui.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/linux-x64/native/libglfw.so.3.3
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/osx-arm64/native/libglfw.3.dylib
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/osx-x64/native/libglfw.3.dylib
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/win-x64/native/glfw3.dll
+/home/khalid/sources/Visuallizer/opentk.organised/bin/Debug/net6.0/runtimes/win-x86/native/glfw3.dll
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.csproj.AssemblyReference.cache
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.GeneratedMSBuildEditorConfig.editorconfig
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.AssemblyInfoInputs.cache
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.AssemblyInfo.cs
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.csproj.CoreCompileInputs.cache
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.sourcelink.json
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.o.48A483BD.Up2Date
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.dll
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/refint/opentk.organised.dll
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.pdb
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/opentk.organised.genruntimeconfig.cache
+/home/khalid/sources/Visuallizer/opentk.organised/obj/Debug/net6.0/ref/opentk.organised.dll

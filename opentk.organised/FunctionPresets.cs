@@ -36,14 +36,14 @@ public static class FunctionPresets
         
         ["Complex Patterns"] = new List<PresetFunction>
         {
-            new() { Name = "Vortex", Expression = "sin(atan2(y,x)*3 + sqrt(x*x + y*y)) * (10/(1 + x*x + y*y))", Description = "Spiral vortex pattern" },
+            new() { Name = "Vortex", Expression = "sin(atan(y/x)*3 + sqrt(x*x + y*y)) * (10/(1 + x*x + y*y))", Description = "Spiral vortex pattern" },
             new() { Name = "Complex Wave", Expression = "sin(x*x + y*y) + 0.5*cos(x*3)*sin(y*3)", Description = "Complex interference pattern" },
             new() { Name = "Fractal-like", Expression = "sin(x) + sin(x*2)/2 + sin(x*4)/4 + cos(y) + cos(y*2)/2 + cos(y*4)/4", Description = "Multi-frequency composition" }
         },
         
         ["Exotic Functions"] = new List<PresetFunction>
         {
-            new() { Name = "Rose Pattern", Expression = "cos(3*atan2(y,x)) * sqrt(x*x + y*y) * exp(-sqrt(x*x + y*y)/5)", Description = "Rose-like pattern" },
+            new() { Name = "Rose Pattern", Expression = "cos(3*atan(y/x)) * sqrt(x*x + y*y) * exp(-sqrt(x*x + y*y)/5)", Description = "Rose-like pattern" },
             new() { Name = "Lattice", Expression = "sin(x*3)*sin(y*3) + 0.3*sin(x*9)*sin(y*9)", Description = "Crystal lattice structure" },
             new() { Name = "Tornado", Expression = "exp(-((x-sin(y/2)*2)*(x-sin(y/2)*2) + (y*0.5)*(y*0.5))/3) * sin(y*2)", Description = "Tornado-like spiral" }
         }
@@ -90,6 +90,13 @@ public static class FunctionPresets
     {
         return Categories.Values.Sum(list => list.Count);
     }
+    
+    public static IEnumerable<(string Name, string Expression, string Description)> GetAllPresets()
+    {
+        return Categories.Values
+            .SelectMany(list => list)
+            .Select(preset => (preset.Name, preset.Expression, preset.Description));
+    }
 }
 
 // Vertex data caching system
@@ -100,6 +107,7 @@ public static class VertexCache
     static VertexCache()
     {
         Directory.CreateDirectory(CacheDirectory);
+        Console.WriteLine($"💾 Vertex cache directory: {CacheDirectory}");
     }
 
     private static string GetCacheKey(string expression, double resolution, Vector2d extents, bool useAdaptive)
@@ -118,42 +126,47 @@ public static class VertexCache
 
     public static bool TryLoadVertices(string expression, double resolution, Vector2d extents, bool useAdaptive, out Position2D[] vertices, out float minHeight, out float maxHeight)
     {
-        vertices = Array.Empty<Position2D>();
-        minHeight = 0f;
-        maxHeight = 0f;
+        // C# 13: Tuple pattern matching with out parameters
+        (vertices, minHeight, maxHeight) = ([], 0f, 0f);
 
         try
         {
             var cacheFile = GetCacheFilePath(expression, resolution, extents, useAdaptive);
-            if (!File.Exists(cacheFile))
-                return false;
-
-            using var reader = new BinaryReader(File.OpenRead(cacheFile));
             
-            // Read metadata
-            var version = reader.ReadInt32();
-            if (version != 1) return false; // Version mismatch
-            
-            minHeight = reader.ReadSingle();
-            maxHeight = reader.ReadSingle();
-            var count = reader.ReadInt32();
-
-            // Read vertices
-            vertices = new Position2D[count];
-            for (int i = 0; i < count; i++)
+            // C# 13: Pattern matching with when guards
+            return File.Exists(cacheFile) switch
             {
-                var x = reader.ReadSingle();
-                var y = reader.ReadSingle();
-                vertices[i] = new Position2D(new Vector2(x, y));
-            }
-
-            Console.WriteLine($"📦 Loaded {count:N0} vertices from cache");
-            return true;
+                false => false,
+                true => TryReadCacheFile(cacheFile, out vertices, out minHeight, out maxHeight)
+            };
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"⚠️  Cache read error: {ex.Message}");
             return false;
         }
+    }
+
+    private static bool TryReadCacheFile(string cacheFile, out Position2D[] vertices, out float minHeight, out float maxHeight)
+    {
+        (vertices, minHeight, maxHeight) = ([], 0f, 0f);
+
+        using var reader = new BinaryReader(File.OpenRead(cacheFile));
+        
+        // Read metadata with pattern matching
+        var (version, min, max, count) = (reader.ReadInt32(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadInt32());
+        
+        if (version is not 1) return false; // C# 13: 'is not' pattern
+
+        (minHeight, maxHeight) = (min, max);
+
+        // C# 13: Collection expression with LINQ
+        vertices = Enumerable.Range(0, count)
+            .Select(_ => new Position2D(new Vector2(reader.ReadSingle(), reader.ReadSingle())))
+            .ToArray();
+
+        Console.WriteLine($"📦 Loaded {count:N0} vertices from cache");
+        return true;
     }
 
     public static void SaveVertices(string expression, double resolution, Vector2d extents, bool useAdaptive, Position2D[] vertices, float minHeight, float maxHeight)
@@ -163,20 +176,21 @@ public static class VertexCache
             var cacheFile = GetCacheFilePath(expression, resolution, extents, useAdaptive);
             using var writer = new BinaryWriter(File.OpenWrite(cacheFile));
             
-            // Write metadata
-            writer.Write(1); // Version
-            writer.Write(minHeight);
-            writer.Write(maxHeight);
-            writer.Write(vertices.Length);
+            // C# 13: Tuple destructuring for metadata
+            var metadata = (Version: 1, MinHeight: minHeight, MaxHeight: maxHeight, Count: vertices.Length);
+            writer.Write(metadata.Version);
+            writer.Write(metadata.MinHeight);
+            writer.Write(metadata.MaxHeight);
+            writer.Write(metadata.Count);
 
-            // Write vertices
-            foreach (var vertex in vertices)
+            // C# 13: Modern foreach with destructuring
+            foreach (var (x, y) in vertices.Select(v => (v.Position.X, v.Position.Y)))
             {
-                writer.Write(vertex.Position.X);
-                writer.Write(vertex.Position.Y);
+                writer.Write(x);
+                writer.Write(y);
             }
 
-            Console.WriteLine($"💾 Cached {vertices.Length:N0} vertices");
+            Console.WriteLine($"💾 Cached {vertices.Length:N0} vertices to {Path.GetFileName(cacheFile)}");
         }
         catch (Exception ex)
         {
