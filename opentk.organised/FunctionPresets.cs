@@ -36,14 +36,14 @@ public static class FunctionPresets
         
         ["Complex Patterns"] = new List<PresetFunction>
         {
-            new() { Name = "Vortex", Expression = "sin(atan(y/x)*3 + sqrt(x*x + y*y)) * (10/(1 + x*x + y*y))", Description = "Spiral vortex pattern" },
+            new() { Name = "Vortex", Expression = "sin((y/(abs(x)+0.1))*3 + sqrt(x*x + y*y)) * (10/(1 + x*x + y*y))", Description = "Spiral vortex pattern" },
             new() { Name = "Complex Wave", Expression = "sin(x*x + y*y) + 0.5*cos(x*3)*sin(y*3)", Description = "Complex interference pattern" },
             new() { Name = "Fractal-like", Expression = "sin(x) + sin(x*2)/2 + sin(x*4)/4 + cos(y) + cos(y*2)/2 + cos(y*4)/4", Description = "Multi-frequency composition" }
         },
         
         ["Exotic Functions"] = new List<PresetFunction>
         {
-            new() { Name = "Rose Pattern", Expression = "cos(3*atan(y/x)) * sqrt(x*x + y*y) * exp(-sqrt(x*x + y*y)/5)", Description = "Rose-like pattern" },
+            new() { Name = "Rose Pattern", Expression = "cos(3*(y/(abs(x)+0.1))) * sqrt(x*x + y*y) * exp(-sqrt(x*x + y*y)/5)", Description = "Rose-like pattern" },
             new() { Name = "Lattice", Expression = "sin(x*3)*sin(y*3) + 0.3*sin(x*9)*sin(y*9)", Description = "Crystal lattice structure" },
             new() { Name = "Tornado", Expression = "exp(-((x-sin(y/2)*2)*(x-sin(y/2)*2) + (y*0.5)*(y*0.5))/3) * sin(y*2)", Description = "Tornado-like spiral" }
         }
